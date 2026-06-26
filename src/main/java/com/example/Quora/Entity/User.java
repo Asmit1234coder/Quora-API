@@ -7,6 +7,7 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -33,9 +34,14 @@ public class User {
     @Column(length = 100)
     private String bio;
 
-    private List<Question> questions;
+    @OneToMany(mappedBy = "users")
+    private List<Question> questions=new ArrayList<>();
 
-    private List<Topic> topics;
+    @OneToMany(mappedBy = "users")
+    private List<Topic> topics=new ArrayList<>();
+
+    @OneToMany(mappedBy = "users")
+    private List<Answers> answers=new ArrayList<>();
 
 
 }

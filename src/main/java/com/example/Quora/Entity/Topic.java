@@ -17,4 +17,6 @@ public class Topic {
     @Column(nullable = false)
     private String Topic;
 
+    @ManyToOne
+    private User users;
 }

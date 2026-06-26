@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 @Entity
@@ -26,4 +28,10 @@ public class Comments {
     @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate //fill only when it is created
     protected Date createdAt;
+
+    @OneToMany(mappedBy = "parent")
+    private List<Answers> answers=new ArrayList<>();
+
+    @ManyToOne
+    private Question question;
 }
