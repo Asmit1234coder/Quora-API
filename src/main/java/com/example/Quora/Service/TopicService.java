@@ -22,14 +22,14 @@ public class TopicService {
     public TopicResponseDTO createTopic(TopicRequestDTO dto) {
 
         Topic topic = Topic.builder()
-                .Topic(dto.getName())
+                .name(dto.getName())
                 .build();
 
         Topic savedTopic = topicRepository.save(topic);
 
         return TopicResponseDTO.builder()
                 .id(savedTopic.getId())
-                .name(savedTopic.getTopic())
+                .name(savedTopic.getName())
                 .build();
     }
 
@@ -43,8 +43,13 @@ public class TopicService {
     private TopicResponseDTO mapToResponseDTO(Topic topic) {
         return TopicResponseDTO.builder()
                 .id(topic.getId())
-                .name(topic.getTopic())
+                .name(topic.getName())
                 .build();
+    }
+
+    public Topic getOrCreateTopic(String name) {
+        return topicRepository.findByName(name)
+                .orElseGet(() -> topicRepository.save(Topic.builder().name(name).build()));
     }
 
 }

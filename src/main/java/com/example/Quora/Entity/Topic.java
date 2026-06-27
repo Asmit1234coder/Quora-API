@@ -15,7 +15,7 @@ public class Topic {
     protected Long id;
 
     @Column(nullable = false)
-    private String Topic;
+    private String name;
 
     @ManyToOne
     private User users;

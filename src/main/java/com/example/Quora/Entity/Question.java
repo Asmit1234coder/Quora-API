@@ -3,6 +3,7 @@ package com.example.Quora.Entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,6 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EntityListeners(AuditingEntityListener.class)
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,9 +26,6 @@ public class Question {
 
     @Column(nullable = false)
     private String body;
-
-    @Column(nullable = false)
-    private String topic;
 
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -42,5 +41,12 @@ public class Question {
     @ManyToOne
     private User users;
 
+    @ManyToMany
+    @JoinTable(
+            name = "question_topics",
+            joinColumns = @JoinColumn(name = "question_id"),
+            inverseJoinColumns = @JoinColumn(name = "topic_id")
+    )
+    private List<Topic> topics = new ArrayList<>();
 
 }
