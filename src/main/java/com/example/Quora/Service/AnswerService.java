@@ -2,6 +2,7 @@ package com.example.Quora.Service;
 
 import com.example.Quora.DTOs.AnswerPostDTO;
 import com.example.Quora.DTOs.AnswerResponseDTO;
+import com.example.Quora.DTOs.AnswerUpdateDTO;
 import com.example.Quora.Entity.Answers;
 import com.example.Quora.Entity.Question;
 import com.example.Quora.Entity.User;
@@ -40,6 +41,17 @@ public class AnswerService {
 
         Answers savedAnswer=answerRepository.save(a);
 
+        return mapToResponseDTO(savedAnswer);
+    }
+
+    public AnswerResponseDTO updateAnswer(Long answerId, AnswerUpdateDTO dto){
+        Answers ans=answerRepository.findById(answerId)
+                .orElseThrow(() -> new RuntimeException("User not found with id: "+ answerId));
+
+        if(dto.getText()!=null){
+            ans.setText(dto.getText());
+        }
+        Answers savedAnswer=answerRepository.save(ans);
         return mapToResponseDTO(savedAnswer);
     }
 
