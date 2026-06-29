@@ -1,15 +1,19 @@
 package com.example.Quora.Service;
 
 
+import com.example.Quora.DTOs.QuestionnResponseDTO;
 import com.example.Quora.DTOs.RegisterUserDTO;
 import com.example.Quora.DTOs.UpdateDTO;
 import com.example.Quora.DTOs.UserResponseDTO;
+import com.example.Quora.Entity.Question;
 import com.example.Quora.Entity.User;
+import com.example.Quora.Repository.QuestionRepository;
 import com.example.Quora.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -18,9 +22,11 @@ import java.util.Optional;
 public class UserService{
 
     private final UserRepository userRepository;
+    private final QuestionRepository questionRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, QuestionRepository questionRepository) {
         this.userRepository = userRepository;
+        this.questionRepository = questionRepository;
     }
 
     public UserResponseDTO RegisterUser(RegisterUserDTO dto) {
@@ -75,8 +81,27 @@ public class UserService{
                 .bio(user.getBio())
                 .email(user.getEmail())
                 .build();
+    }
+
+    public List<QuestionnResponseDTO> listAllQues(Long userId){
+        if (!userRepository.existsById(userId)) {
+            throw new RuntimeException("User not found with id: " + userId);
+        }
+
+        List<Question> questions=questionRepository.findByUsers_Id(userId);
+
+        return questions.stream()
+                .map(this::mapToResponseDTO)
+                .toList();
 
 
+    }
+
+    private QuestionnResponseDTO mapToResponseDTO(Question question) {
+        return QuestionnResponseDTO.builder()
+                .id(question.getId())
+                .title(question.getTitle())
+                        .build();
 
     }
 }
